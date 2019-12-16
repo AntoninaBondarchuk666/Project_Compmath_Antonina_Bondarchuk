@@ -3,6 +3,7 @@
 /*
  * Create BigFloat and return the pointer.
  */
+ 
 BigFloat *create(char *str) {
   int i;
   BigFloat *res;
@@ -26,6 +27,7 @@ void freeBigFloat(BigFloat *b) {
  * Parses in a string representing a floating point number and creates a
  * BigFloat out of the string representation.
  */
+ 
 void parse(BigFloat *b, char *str) {
   int i = 0;
   int index = 0;
@@ -45,8 +47,20 @@ void parse(BigFloat *b, char *str) {
 }
 
 /*
+ * Make the BigFloat negative
+ */
+ 
+void make_negetive(BigFloat *b) {
+  int i;
+  if (b->negative == 0) {
+     b->negative = 1;
+  }
+}
+  
+/*
  * Prints out the given BigFloat.
  */
+ 
 void print(BigFloat *b) {
   int i;
   if (b->negative) {
@@ -62,8 +76,9 @@ void print(BigFloat *b) {
 }
 
 /*
- * Prints of the BigFloat to the given char buffer.
+ * Prints of the BigFloat to the given char buffer
  */
+ 
 void sprint(char *out, BigFloat *b) {
   int i;
   int index = 0;
@@ -81,9 +96,27 @@ void sprint(char *out, BigFloat *b) {
 
 
 /*
- * Adds two BigFloats and puts the result in the first parameter.
- * TODO: work with negative BigFloats
+ * Solve any Linear Equation in One Variable (aY + b + c = 0)
  */
+ 
+void solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c, BigFloat *res1, BigFloat *res2){
+    clear(res1);
+    clear(res2);
+    standardizeDecimal(a, b);
+    standardizeDecimal(a, c);
+    if (equals(a, res1)) { // res1 == 0 so check if a == 0
+    printf("Value of Y cannot be predicted\n");
+  } else {
+      add(b,c,res1);
+      divide(res1,a,res2);
+      make_negetive(res2);
+  }
+}
+
+/*
+ * Adds two BigFloats and puts the result in the first parameter.
+ */
+ 
 void add(BigFloat *a, BigFloat *b, BigFloat *res) {
   int i, result;
   int carry = 0;
@@ -94,6 +127,7 @@ void add(BigFloat *a, BigFloat *b, BigFloat *res) {
     result = carry;
 /*    result += (a->negative) ? -1 * a->digits[i] : a->digits[i];
     result += (b->negative) ? -1 * b->digits[i] : b->digits[i]; */
+    
     result += a->digits[i] + b->digits[i];
     carry = result / 10;
     res->digits[i] = result % 10;
@@ -111,6 +145,7 @@ void add(BigFloat *a, BigFloat *b, BigFloat *res) {
 /*
  * Subtract b from a and return a new BigFloat as the result.
  */
+ 
 void subtract(BigFloat *a, BigFloat *b, BigFloat *res) {
   int i, result;
   int carry = 0;
@@ -140,7 +175,6 @@ void subtract(BigFloat *a, BigFloat *b, BigFloat *res) {
   trailingZeros(b);
   trailingZeros(res);
 }
-  
 
 void multiply(BigFloat *a, BigFloat *b, BigFloat *res) {
   int i;
@@ -214,6 +248,7 @@ void divide(BigFloat *a, BigFloat *b, BigFloat *res) {
 /*
  * Tests whether or not two BigFloats are equal.
  */
+ 
 char equals(BigFloat *a, BigFloat *b) {
   int i;
   if (a == b) {
@@ -235,6 +270,7 @@ char equals(BigFloat *a, BigFloat *b) {
 /*
  * Tests whether or not two BigFloats are equal up to the given decimal place.
  */
+ 
 char equalsUpTo(BigFloat *a, BigFloat *b, int decimal) {
   int i;
   if (a == b) {
@@ -257,6 +293,7 @@ char equalsUpTo(BigFloat *a, BigFloat *b, int decimal) {
  * Compares two BigFloats so that compare(a, b) > 0 if
  * a > b and so on with = and <
  */
+ 
 char compare(BigFloat *a, BigFloat *b) {
   int i;
   if (a == b) {
@@ -279,6 +316,7 @@ char compare(BigFloat *a, BigFloat *b) {
  * Shifts the BigFloat down so that there are not any trailing zeros and all
  * zeros are leading the BigFloat.
  */
+ 
 void zerosFirst(BigFloat *a) {
   int i, start;
   for (i = PRECISION - 1; i >= 0 && !a->digits[i]; i--);
@@ -291,6 +329,7 @@ void zerosFirst(BigFloat *a) {
  * Shifts the BigFloat down so that there are not any leading zeros and all
  * zeros are trailing the BigFloat.
  */
+ 
 void trailingZeros(BigFloat *a) {
   int i, start;
   for (i = 0; i < PRECISION && !a->digits[i]; i++);
@@ -305,6 +344,7 @@ void trailingZeros(BigFloat *a) {
 /*
  * Takes two BigFloats and shifts them so that they have the same decimal point.
  */
+ 
 void standardizeDecimal(BigFloat *a, BigFloat *b) {
   if (b->decimal > a->decimal) {
     shiftDownBy(a->digits, PRECISION, b->decimal - a->decimal);
@@ -318,6 +358,7 @@ void standardizeDecimal(BigFloat *a, BigFloat *b) {
 /*
  * Shifts a char array down by the specified shift
  */
+ 
 void shiftDownBy(char *ar, int length, int shift) {
   int i;
   for (i = length - 1; i >= 0; i--) {
@@ -332,6 +373,7 @@ void shiftDownBy(char *ar, int length, int shift) {
 /*
  * Shifts a char array up by the specified shift
  */
+ 
 void shiftUpBy(char *ar, int length, int shift) {
   int i;
   for (i = 0; i < length; i++) {
