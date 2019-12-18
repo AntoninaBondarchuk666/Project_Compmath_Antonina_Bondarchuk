@@ -94,6 +94,22 @@ void sprint(char *out, BigFloat *b) {
   out[index] = '\0';
 }
 
+long long int convert_to_int(BigFloat *b) { //no more than 10 numbers before "."
+  int i;
+  int n;
+  char res[20];
+  for (i = 0; i < b->decimal; i++) {
+    res[i] = b->digits[i];
+    n++;
+  }
+  long long int s;
+  s = 0;
+  long long int f, pow1;
+  for (f = n - 1, pow1 = 1; f >= 0; --f, pow1*=10) {
+    s += res[f] * pow1;
+  }
+ return s;
+}
 
 /*
  * Solve any Linear Equation in One Variable (aY + b + c = 0)
