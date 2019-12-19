@@ -20,7 +20,7 @@ public:
    
 	// construct a vector of vectors of Pairs to represent an adjacency list
 	vector<vector<Pair>> adjList;
-
+	
 	// Graph Constructor
 	Graph(vector<Edge> const &edges, int N)
 	{
@@ -38,7 +38,6 @@ public:
 			adjList[src].push_back(make_pair(dest, weight));
 		}
 	}
-
 };
 
 //******************************************
@@ -51,5 +50,6 @@ public:
     void displayMatrix(int v);
     void matrix_add_edge(int myvertArr[20][20], int u, int v);
     int random_input(int myvertArr[20][20], list<int>*ls, vector<Edge> & edges, int n);
+    int write_to_file_edges(vector<Edge> & edges, int n);
     //******************************************
 #endif
