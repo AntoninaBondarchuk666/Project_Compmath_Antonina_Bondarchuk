@@ -32,7 +32,8 @@ LL_Int_type quadratic_equation(BigFloat *, BigFloat *, BigFloat *); //Solve quad
 LL_Int_type convert_to_int(BigFloat *); //convert the BigFloat number to int
 Void_type make_array(FILE*, Char_type*, Int_type); //create array from file
 Void_type read_from_file(Char_type*); //read array from file
-Void_type write_to_file(BigFloat *); //Write the BigFloat to file
+Void_type write_to_file(BigFloat *); //Write the BigFloat to txt file
+Void_type write_to_binfile(BigFloat *);  //Write the BigFloat to binary file
 
 Void_type standardizeDecimal(BigFloat *, BigFloat *); //shifts two BigFloats so that they have the same decimal point
 Void_type multiplyLine(BigFloat *, BigFloat *, Int_type); //Multiply using line method
