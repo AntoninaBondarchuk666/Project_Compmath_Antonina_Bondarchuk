@@ -44,6 +44,23 @@ void addedge(list<int> *ls, int x, int y){
 	return;
 }
 
+// Input components of all edges: src, dest, weight to "Orgraph_file.txt"
+int write_to_file_edges(vector<Edge> & edges, int n){
+    
+    ofstream  ifs("Orgraph_file.txt");
+    int q1,q2,me;
+	struct Edge records[n];
+	
+    if(ifs.fail()) {
+        cout << "Error opening student records file (Orgraph_file.txt)" <<endl;
+		exit(1);
+     }
+	int i =0;
+	for(int h = 0; h<n; h++){
+     	ifs <<  edges[h].src << "  " << edges[h].dest << "  " << edges[h].weight << "\n";
+	     }
+}
+
 // Input components of all edges: src, dest, weight from "Orgraph_file.txt"
 int read_from_file_edges(int vertArr[20][20], list<int> *ls, vector<Edge> & edges, int n){
     
@@ -180,23 +197,20 @@ int main()
     //inputedges(vertArr, ls, edges, n);
     random_input(vertArr, ls, edges, m);  // for random input m == n !!!
     //read_from_file_edges(vertArr, ls, edges, n);
+    write_to_file_edges(edges, n);
     
     
 	Graph graph(edges, m);
 	
 	//all_addedge(graph, ls, m);
     
-
 	// construct graph
 	printGraph(graph, m);
     
     displayMatrix(vertArr, m);
     
     //DFS algorithm
-    //cout << "----------";
 	cout << "\n***DFS***" << endl;
 	DFS(ls,m,0);
 	return 0;
 }
-
-
