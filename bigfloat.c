@@ -5,8 +5,8 @@
  * Create BigFloat and return the pointer.
  */
  
-BigFloat *create(char *str) {
-  int i;
+BigFloat *create(Char_type *str) {
+  Int_type i;
   BigFloat *res;
   res = malloc(sizeof(BigFloat));
   res->decimal = 1;
@@ -19,6 +19,7 @@ BigFloat *create(char *str) {
 }
 
 
+
 void freeBigFloat(BigFloat *b) {
   free(b);
 }
@@ -27,26 +28,25 @@ void freeBigFloat(BigFloat *b) {
  * Create the BigFloat from file.
  */
  
-void make_array(FILE* file, char* array, int size) {
+Void_type make_array(FILE* file, Char_type* array, Int_type size) {
    // read entire file into array
    fread(array, 1, size, file);
 }
 
-void write_Bigflot_to_file(FILE* file, char* array, int size) {
+Void_type write_Bigflot_to_file(FILE* file, Char_type* array, Int_type size) {
    fwrite (array, 1, size, file);
 }
 
-void read_from_file(char* res){
+Void_type read_from_file(Char_type* res){
   FILE* file = fopen("Bigfloat_read_file.txt", "r");
   if (file == NULL) { printf("Error!"); }
   fseek(file, 0, SEEK_END);
-  int fs = ftell(file);
+  Int_type fs = ftell(file);
   fseek(file, 0, SEEK_SET);
-  char array[fs];
-  res[fs];
+  Char_type array[fs];
   make_array(file, array, fs);
   fclose(file);
-  for(int i = 0; i < fs; i++) {
+  for(Int_type i = 0; i < fs; i++) {
       res[i] = array[i];
   }
 }
@@ -55,11 +55,11 @@ void read_from_file(char* res){
  * Write the BigFloat to file.
  */
  
-void write_to_file(BigFloat *b){
+Void_type write_to_file(BigFloat *b){
   FILE* file = fopen("Bigfloat_write_file.txt", "w");
   if (file == NULL) { printf("Error!"); }
   else{
-  int i;
+  Int_type i;
   if (b->negative) {
     fprintf(file,"-");
   }
@@ -79,9 +79,9 @@ void write_to_file(BigFloat *b){
  * BigFloat out of the string representation.
  */
  
-void parse(BigFloat *b, char *str) {
-  int i = 0;
-  int index = 0;
+Void_type parse(BigFloat *b, char *str) {
+  Int_type i = 0;
+  Int_type index = 0;
   if (str[0] == '-') {
     b->negative = 1;
     i = 1;
@@ -101,8 +101,8 @@ void parse(BigFloat *b, char *str) {
  * Make the BigFloat negative
  */
  
-void make_negetive(BigFloat *b) {
-  int i;
+Void_type make_negetive(BigFloat *b) {
+  Int_type i;
   if (b->negative == 0) {
      b->negative = 1;
   }
@@ -112,8 +112,8 @@ void make_negetive(BigFloat *b) {
  * Prints out the given BigFloat.
  */
  
-void print(BigFloat *b) {
-  int i;
+Void_type print(BigFloat *b) {
+  Int_type i;
   if (b->negative) {
     printf("-");
   }
@@ -130,17 +130,17 @@ void print(BigFloat *b) {
  * Truncation of integral part of the BigFloat number (function for quadratic equation)
  */
  
-long long int convert_to_int(BigFloat *b) {
-  int i = 0;
-  int n = 0;
-  char res[30];
+LL_Int_type convert_to_int(BigFloat *b) {
+  Int_type i = 0;
+  Int_type n = 0;
+  Char_type res[30];
   for (i = 0; i < b->decimal; i++) {
     res[i] = b->digits[i];
     n++;
   }
-  long long int s;
+  LL_Int_type s;
   s = 0;
-  long long int f, pow1;
+  LL_Int_type f, pow1;
   if ( n<20 ){   //no more than 19 numbers before "."
     for (f = n - 1, pow1 = 1; f >= 0; --f, pow1*=10) {
         s += res[f] * pow1;
@@ -156,9 +156,9 @@ long long int convert_to_int(BigFloat *b) {
  * Solve quadratic equation Ax**2+Bx+C
  */
  
-long long int quadratic_equation(BigFloat *a1, BigFloat *b1, BigFloat *c1){
-  long long int a,b,c;
-  long long int d,root1,root2;  
+LL_Int_type quadratic_equation(BigFloat *a1, BigFloat *b1, BigFloat *c1){
+  LL_Int_type a,b,c;
+  LL_Int_type d,root1,root2;  
  
   a = convert_to_int(a1);
   b = convert_to_int(b1);
@@ -198,9 +198,9 @@ long long int quadratic_equation(BigFloat *a1, BigFloat *b1, BigFloat *c1){
  * Prints of the BigFloat to the given char buffer
  */
  
-void sprint(char *out, BigFloat *b) {  
-  int i;
-  int index = 0;
+Void_type sprint(char *out, BigFloat *b) {  
+  Int_type i;
+  Int_type index = 0;
   if (b->negative) {
     out[index++] = '-';
   }
@@ -218,7 +218,7 @@ void sprint(char *out, BigFloat *b) {
  * Solve any Linear Equation in One Variable (aY + b + c = 0)
  */
  
-void solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c){
+Void_type solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c){
     BigFloat *res1, *res2;
 
     res1 = create("0.0");
@@ -227,7 +227,7 @@ void solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c){
     standardizeDecimal(a, b);
     standardizeDecimal(a, c);
     if (equals(a, res1)) { // res1 == 0 so check if a == 0
-    printf("Value of Y cannot be predicted\n");
+    printf("Value of Y cannot be predicted!!!\n");
   } else {
       add(b,c,res1);
       divide(res1,a,res2);
@@ -240,9 +240,9 @@ void solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c){
  * Adds two BigFloats and puts the result in the first parameter.
  */
  
-void add(BigFloat *a, BigFloat *b, BigFloat *res) {
-  int i, result;
-  int carry = 0;
+Void_type add(BigFloat *a, BigFloat *b, BigFloat *res) {
+  Int_type i, result;
+  Int_type carry = 0;
   standardizeDecimal(a, b);
   clear(res);
   res->decimal = a->decimal;
@@ -269,9 +269,9 @@ void add(BigFloat *a, BigFloat *b, BigFloat *res) {
  * Subtract b from a and return a new BigFloat as the result.
  */
  
-void subtract(BigFloat *a, BigFloat *b, BigFloat *res) {
-  int i, result;
-  int carry = 0;
+Void_type subtract(BigFloat *a, BigFloat *b, BigFloat *res) {
+  Int_type i, result;
+  Int_type carry = 0;
   BigFloat *top, *bottom;
   standardizeDecimal(a, b);
   clear(res);
@@ -300,9 +300,9 @@ void subtract(BigFloat *a, BigFloat *b, BigFloat *res) {
 }
   
 
-void multiply(BigFloat *a, BigFloat *b, BigFloat *res) {
-  int i;
-  int carry = 0;
+Void_type multiply(BigFloat *a, BigFloat *b, BigFloat *res) {
+  Int_type i;
+  Int_type carry = 0;
   BigFloat *line = create("0.0");
   BigFloat *temp = create("0.0");
   clear(res);
@@ -327,9 +327,9 @@ void multiply(BigFloat *a, BigFloat *b, BigFloat *res) {
   res->negative = ((a->negative || b->negative) && !(a->negative && b->negative)) ? 1 : 0;
 }
 
-void multiplyLine(BigFloat *a, BigFloat *line, int mult) {
-  int i, result;
-  int carry = 0;
+Void_type multiplyLine(BigFloat *a, BigFloat *line, int mult) {
+  Int_type i, result;
+  Int_type carry = 0;
   for (i = PRECISION - 1; i >= 0; i--) {
     result = carry;
     result += a->digits[i] * mult;
@@ -338,10 +338,10 @@ void multiplyLine(BigFloat *a, BigFloat *line, int mult) {
   }
 }
 
-void divide(BigFloat *a, BigFloat *b, BigFloat *res) {
-  int i, counter;
-  int carry = 0;
-  int index = 0;
+Void_type divide(BigFloat *a, BigFloat *b, BigFloat *res) {
+  Int_type i, counter;
+  Int_type carry = 0;
+  Int_type index = 0;
   clear(res);
   res->decimal = b->decimal;
   if (equals(b, res)) { // res == 0 so check if b == 0
@@ -373,8 +373,8 @@ void divide(BigFloat *a, BigFloat *b, BigFloat *res) {
  * Tests whether or not two BigFloats are equal.
  */
  
-char equals(BigFloat *a, BigFloat *b) {
-  int i;
+Char_type equals(BigFloat *a, BigFloat *b) {
+  Int_type i;
   if (a == b) {
     return 1;
   } else {
@@ -385,9 +385,8 @@ char equals(BigFloat *a, BigFloat *b) {
         }
       }
       return 1; 
-    } else {
-      return 0;
-    }
+    } 
+    else {return 0;}
   }
 }
 
@@ -395,8 +394,8 @@ char equals(BigFloat *a, BigFloat *b) {
  * Tests whether or not two BigFloats are equal up to the given decimal place.
  */
  
-char equalsUpTo(BigFloat *a, BigFloat *b, int decimal) {
-  int i;
+Char_type equalsUpTo(BigFloat *a, BigFloat *b, Int_type decimal) {
+  Int_type i;
   if (a == b) {
     return 1;
   } else {
@@ -418,19 +417,19 @@ char equalsUpTo(BigFloat *a, BigFloat *b, int decimal) {
  * a > b and so on with = and <
  */
  
-char compare(BigFloat *a, BigFloat *b) {
-  int i;
+Char_type compare(BigFloat *a, BigFloat *b) {
+  Int_type i;
   if (a == b) {
     return 0;
   } 
   else {
     if (a->decimal != b->decimal) {
-      return (char) a->decimal - b->decimal;
+      return (Char_type) a->decimal - b->decimal;
     } 
     else {
       for (i = 0; i < PRECISION; i++) {
         if (a->digits[i] != b->digits[i]) {
-          return (char) a->digits[i] - b->digits[i];
+          return (Char_type) a->digits[i] - b->digits[i];
         }
       }
       return 0;
@@ -443,8 +442,8 @@ char compare(BigFloat *a, BigFloat *b) {
  * zeros are leading the BigFloat.
  */
  
-void zerosFirst(BigFloat *a) {
-  int i, start;
+Void_type zerosFirst(BigFloat *a) {
+  Int_type i, start;
   for (i = PRECISION - 1; i >= 0 && !a->digits[i]; i--);
   start = i;
   shiftDownBy(a->digits, PRECISION, PRECISION - start - 1);
@@ -456,8 +455,8 @@ void zerosFirst(BigFloat *a) {
  * zeros are trailing the BigFloat.
  */
  
-void trailingZeros(BigFloat *a) {
-  int i, start;
+Void_type trailingZeros(BigFloat *a) {
+  Int_type i, start;
   for (i = 0; i < PRECISION && !a->digits[i]; i++);
   if (a->decimal - i < 1) {
     i = a->decimal - 1;
@@ -471,7 +470,7 @@ void trailingZeros(BigFloat *a) {
  * Takes two BigFloats and shifts them so that they have the same decimal point.
  */
  
-void standardizeDecimal(BigFloat *a, BigFloat *b) {
+Void_type standardizeDecimal(BigFloat *a, BigFloat *b) {
   if (b->decimal > a->decimal) {
     shiftDownBy(a->digits, PRECISION, b->decimal - a->decimal);
     a->decimal = b->decimal;
@@ -485,8 +484,8 @@ void standardizeDecimal(BigFloat *a, BigFloat *b) {
  * Shifts a char array down by the specified shift
  */
  
-void shiftDownBy(char *ar, int length, int shift) {
-  int i;
+Void_type shiftDownBy(Char_type *ar, Int_type length, Int_type shift) {
+  Int_type i;
   for (i = length - 1; i >= 0; i--) {
     if (i - shift >= 0) {
       ar[i] = ar[i - shift];
@@ -500,8 +499,8 @@ void shiftDownBy(char *ar, int length, int shift) {
  * Shifts a char array up by the specified shift
  */
  
-void shiftUpBy(char *ar, int length, int shift) {
-  int i;
+Void_type shiftUpBy(Char_type *ar, Int_type length, Int_type shift) {
+  Int_type i;
   for (i = 0; i < length; i++) {
     if (i + shift < length) {
       ar[i] = ar[i + shift];
@@ -511,8 +510,8 @@ void shiftUpBy(char *ar, int length, int shift) {
   }
 }
 
-void clear(BigFloat *a) {
-  int i;
+Void_type clear(BigFloat *a) {
+  Int_type i;
   if (a != NULL) {
     for (i = 0; i < PRECISION; i++) {
       a->digits[i] = 0;
@@ -520,8 +519,8 @@ void clear(BigFloat *a) {
   }
 }
 
-void printAr(char *ar, int length) {
-  int i;
+Void_type printAr(Char_type *ar, Int_type length) {
+  Int_type i;
   printf("[%d", ar[0]);
   for (i = 1; i < length; i++) {
     printf(", %d", ar[i]);
