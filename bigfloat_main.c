@@ -2,18 +2,18 @@
 #include "mytype.h"
 #define d "0.0"
 
-int main() {
+Int_type main() {
     
     printf("Please, enter the first Big Float number:  \n");
-    char line1[1024];
+    Char_type line1[1024];
     scanf("%1023[^\n]", line1);
     getchar();
     printf("Please, enter the second Big Float number:  \n");
-    char line2[1024];
+    Char_type line2[1024];
     scanf("%1023[^\n]", line2);
     getchar();
     printf("Please, enter the third Big Float number:  \n");
-    char line3[100];
+    Char_type line3[100];
 
     //scanf("%1023[^\n]", line3);
    // printf("\n");
@@ -43,6 +43,7 @@ int main() {
    
    printf("Solve the quadratic equation: \n");
    quadratic_equation(X, Y, Z);
+   printf("\n");
    
     printf("\n");
     add(X,Y,res1);
