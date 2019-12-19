@@ -56,7 +56,7 @@ void read_from_file(char* res){
  */
  
 void write_to_file(BigFloat *b){
-  FILE* file = fopen("Bigfloat_write_file_name.txt", "w");
+  FILE* file = fopen("Bigfloat_write_file.txt", "w");
   if (file == NULL) { printf("Error!"); }
   else{
   int i;
