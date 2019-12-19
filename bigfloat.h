@@ -28,8 +28,8 @@ Char_type equalsUpTo(BigFloat *, BigFloat *, Int_type);  //two BigFloats are equ
 Char_type compare(BigFloat *, BigFloat *);  //Compares two BigFloats
 Void_type clear(BigFloat *);  //Clear the BigFloat number (the BigFloat number = 0)
 Void_type solve_for_y(BigFloat *, BigFloat *, BigFloat *); //Solve any Linear Equation in One Variable (aY + b + c = 0)
-LLtype Int_type quadratic_equation(BigFloat *, BigFloat *, BigFloat *); //Solve quadratic equation Ax**2+Bx+C
-LLtype Int_type convert_to_int(BigFloat *); //convert the BigFloat number to int
+LL_Int_type quadratic_equation(BigFloat *, BigFloat *, BigFloat *); //Solve quadratic equation Ax**2+Bx+C
+LL_Int_type convert_to_int(BigFloat *); //convert the BigFloat number to int
 Void_type make_array(FILE*, Char_type*, Int_type); //create array from file
 Void_type read_from_file(Char_type*); //read array from file
 Void_type write_to_file(BigFloat *); //Write the BigFloat to file
