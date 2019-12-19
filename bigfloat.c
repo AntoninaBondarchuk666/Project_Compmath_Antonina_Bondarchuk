@@ -1,4 +1,5 @@
 #include "bigfloat.h"
+# define R 10000000000000000000
 
 /*
  * Create BigFloat and return the pointer.
@@ -18,9 +19,59 @@ BigFloat *create(char *str) {
 }
 
 
-
 void freeBigFloat(BigFloat *b) {
   free(b);
+}
+
+/*
+ * Create the BigFloat from file.
+ */
+ 
+void make_array(FILE* file, char* array, int size) {
+   // read entire file into array
+   fread(array, 1, size, file);
+}
+
+void write_Bigflot_to_file(FILE* file, char* array, int size) {
+   fwrite (array, 1, size, file);
+}
+
+void read_from_file(char* res){
+  FILE* file = fopen("Bigfloat_read_file.txt", "r");
+  if (file == NULL) { printf("Error!"); }
+  fseek(file, 0, SEEK_END);
+  int fs = ftell(file);
+  fseek(file, 0, SEEK_SET);
+  char array[fs];
+  res[fs];
+  make_array(file, array, fs);
+  fclose(file);
+  for(int i = 0; i < fs; i++) {
+      res[i] = array[i];
+  }
+}
+
+/*
+ * Write the BigFloat to file.
+ */
+ 
+void write_to_file(BigFloat *b){
+  FILE* file = fopen("Bigfloat_write_file_name.txt", "w");
+  if (file == NULL) { printf("Error!"); }
+  else{
+  int i;
+  if (b->negative) {
+    fprintf(file,"-");
+  }
+  for (i = 0; i < PRECISION; i++) {
+    if (i == b->decimal) {
+      fprintf(file,".");
+           }
+    fprintf(file, "%d", b->digits[i]);
+       }
+  printf("\n");
+    }
+  fclose(file);
 }
 
 /*
@@ -76,10 +127,78 @@ void print(BigFloat *b) {
 }
 
 /*
+ * Truncation of integral part of the BigFloat number (function for quadratic equation)
+ */
+ 
+long long int convert_to_int(BigFloat *b) {
+  int i = 0;
+  int n = 0;
+  char res[30];
+  for (i = 0; i < b->decimal; i++) {
+    res[i] = b->digits[i];
+    n++;
+  }
+  long long int s;
+  s = 0;
+  long long int f, pow1;
+  if ( n<20 ){   //no more than 19 numbers before "."
+    for (f = n - 1, pow1 = 1; f >= 0; --f, pow1*=10) {
+        s += res[f] * pow1;
+    }
+    return s;
+  }
+  else{printf("ERROR: Too Big number to solve quadratic equation!!!\n");
+      return 0;
+  }
+}
+
+/*
+ * Solve quadratic equation Ax**2+Bx+C
+ */
+ 
+long long int quadratic_equation(BigFloat *a1, BigFloat *b1, BigFloat *c1){
+  long long int a,b,c;
+  long long int d,root1,root2;  
+ 
+  a = convert_to_int(a1);
+  b = convert_to_int(b1);
+  c = convert_to_int(c1);
+  
+  d = b * b - 4 * a * c;
+  printf("A: %lld\n B: %lld\n C: %lld\n",a,b,c);
+
+  if (d < 0){
+    printf("Roots are complex number.\n");
+ 
+   printf("Roots of quadratic equation are: ");
+   printf("%.lld%+.3fi",-b/(2*a),sqrt(-d)/(2*a));
+   printf(", %.lld%+.3fi",-b/(2*a),-sqrt(-d)/(2*a));
+  
+    return 0; 
+  }
+ else if(d==0){
+   printf("Both roots are equal.\n");
+ 
+   root1 = -b /(2* a);
+   printf("Root of quadratic equation is: %lld ",root1);
+ 
+   return 0;
+  }
+  else{
+   printf("Roots are real numbers.\n");
+  
+   root1 = ( -b + sqrt(d)) / (2* a);
+   root2 = ( -b - sqrt(d)) / (2* a);
+   printf("Roots of quadratic equation are: %lld , %lld",root1,root2);
+  }
+  return 0;
+}
+
+/*
  * Prints of the BigFloat to the given char buffer
  */
  
-void sprint(char *out, BigFloat *b) {
+void sprint(char *out, BigFloat *b) {  
   int i;
   int index = 0;
   if (b->negative) {
@@ -94,30 +213,17 @@ void sprint(char *out, BigFloat *b) {
   out[index] = '\0';
 }
 
-long long int convert_to_int(BigFloat *b) { //no more than 10 numbers before "."
-  int i;
-  int n;
-  char res[20];
-  for (i = 0; i < b->decimal; i++) {
-    res[i] = b->digits[i];
-    n++;
-  }
-  long long int s;
-  s = 0;
-  long long int f, pow1;
-  for (f = n - 1, pow1 = 1; f >= 0; --f, pow1*=10) {
-    s += res[f] * pow1;
-  }
- return s;
-}
 
 /*
  * Solve any Linear Equation in One Variable (aY + b + c = 0)
  */
  
-void solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c, BigFloat *res1, BigFloat *res2){
-    clear(res1);
-    clear(res2);
+void solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c){
+    BigFloat *res1, *res2;
+
+    res1 = create("0.0");
+    res2 = create("0.0");
+    
     standardizeDecimal(a, b);
     standardizeDecimal(a, c);
     if (equals(a, res1)) { // res1 == 0 so check if a == 0
@@ -126,6 +232,7 @@ void solve_for_y(BigFloat *a, BigFloat *b, BigFloat *c, BigFloat *res1, BigFloat
       add(b,c,res1);
       divide(res1,a,res2);
       make_negetive(res2);
+      print(res2);
   }
 }
 
@@ -191,6 +298,7 @@ void subtract(BigFloat *a, BigFloat *b, BigFloat *res) {
   trailingZeros(b);
   trailingZeros(res);
 }
+  
 
 void multiply(BigFloat *a, BigFloat *b, BigFloat *res) {
   int i;
@@ -314,10 +422,12 @@ char compare(BigFloat *a, BigFloat *b) {
   int i;
   if (a == b) {
     return 0;
-  } else {
+  } 
+  else {
     if (a->decimal != b->decimal) {
       return (char) a->decimal - b->decimal;
-    } else {
+    } 
+    else {
       for (i = 0; i < PRECISION; i++) {
         if (a->digits[i] != b->digits[i]) {
           return (char) a->digits[i] - b->digits[i];
