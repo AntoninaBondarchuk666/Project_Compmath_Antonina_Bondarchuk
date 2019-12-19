@@ -19,7 +19,9 @@ BigFloat *create(Char_type *str) {
 }
 
 
-
+/*
+ * Free the BigFloat number.
+ */
 void freeBigFloat(BigFloat *b) {
   free(b);
 }
@@ -52,11 +54,34 @@ Void_type read_from_file(Char_type* res){
 }
 
 /*
- * Write the BigFloat to file.
+ * Write the BigFloat to txt file.
  */
  
 Void_type write_to_file(BigFloat *b){
   FILE* file = fopen("Bigfloat_write_file.txt", "w");
+  if (file == NULL) { printf("Error!"); }
+  else{
+  Int_type i;
+  if (b->negative) {
+    fprintf(file,"-");
+  }
+  for (i = 0; i < PRECISION; i++) {
+    if (i == b->decimal) {
+      fprintf(file,".");
+           }
+    fprintf(file, "%d", b->digits[i]);
+       }
+  printf("\n");
+    }
+  fclose(file);
+}
+
+/*
+ * Write the BigFloat to binary file.
+ */
+
+Void_type write_to_binfile(BigFloat *b){
+  FILE* file = fopen("Bigfloat_write_file.dat", "wb");
   if (file == NULL) { printf("Error!"); }
   else{
   Int_type i;
